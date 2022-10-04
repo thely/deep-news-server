@@ -495,8 +495,8 @@ async function writeFile(filename, writedata) {
 }
 
 // actual server location
-http.listen(8081, () => {
-  console.log('listening on *:8081');
+http.listen(process.env.PORT, () => {
+  console.log(`listening on *:${process.env.PORT}`);
   
   // if (process.env.MODE != "development") {
   //   (async () => {
