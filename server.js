@@ -15,6 +15,7 @@ const http = require('http').Server(app);
 
 const sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database(path.resolve('./data/db.sqlite'));
+console.log(path.resolve('./data/db.sqlite'));
 
 db.serialize(function() {
   console.log('creating databases if they don\'t exist');
