@@ -14,7 +14,15 @@ const app = express();
 const http = require('http').Server(app);
 
 const sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database(":memory:");
+let db;
+
+// if (process.env.ZONE == "DEV") {
+//   console.log("making local file db");
+//   db = new sqlite3.Database("./data/db.sqlite");
+// } else {
+//   console.log("making db in memory");
+  db = new sqlite3.Database(":memory:");
+// }
 // var db = new sqlite3.Database(path.resolve('./data/db.sqlite'));
 // console.log(path.resolve('./data/db.sqlite'));
 
@@ -136,7 +144,8 @@ io.on('connection', async (socket) => {
       }
 
       // get the user's portfolio
-      if (userid) {
+      if (userid && userid != "undefined") {
+        console.log("user id is " + userid);
         var getUserPortfolio = `
           SELECT stocks.stockid, userid, stocks.word, count 
           FROM portfolio 
@@ -183,7 +192,7 @@ io.on('connection', async (socket) => {
   // get all existing messages
   var getMessages = `
     SELECT * FROM 
-      (SELECT * FROM messages ORDER BY messageid DESC LIMIT 20) as messages
+      (SELECT * FROM messages ORDER BY messageid DESC LIMIT ${process.env.MSG_LIMIT}) as messages
       ORDER BY messageid ASC`;
   db.all(getMessages, function(err, msgs) {
     console.log("checking existing messages");
