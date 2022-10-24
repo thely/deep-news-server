@@ -238,11 +238,17 @@ io.on('connection', async (socket) => {
 
   // new message entered
   socket.on('message', (data) => {
-    console.log('message: ', JSON.stringify(data));
+    // console.log('message: ', JSON.stringify(data));
+
+    var msg = data.msg.replace(/["]/giu, '\"\"');
 
     db.serialize(() => {
-      var insertUser = `INSERT INTO messages (userid, username, text, posted) VALUES (${data.userid}, "${data.username}", "${data.msg}", ${Date.now()});`;
+      var insertUser = `INSERT INTO messages (userid, username, text, posted) VALUES (${data.userid}, "${data.username}", "${msg}", ${Date.now()});`;
       db.run(insertUser, function(err) {
+        if (err) {
+          console.log(err);
+        }
+        
         const msgid = this.lastID;
         console.log(msgid);
 
