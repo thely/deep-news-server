@@ -226,8 +226,11 @@ class StockMarket {
     console.log(sLength);
     if (sLength >= this.limit) return;
     
-    msg = msg.replace(/[\p{P}$+<=>^`|~]/gu, '').replace(/\s+/g, " ");
+    // (?!['-])\p{P}
+    // /[,.?!$+<=>^`|~]/gu
+    msg = msg.replace(/(?!['-])\p{P}/giu, '').replace(/\s+/g, " ");
     msg = msg.split(" ");
+    console.log(msg);
     
     const avgLen = Math.round(msg.map(m => m.length).reduce((a, b) => a + b) / msg.length);
     
@@ -241,7 +244,11 @@ class StockMarket {
         continue;
       }
 
+      // one-letter words are a bit short for our use
+      if (m.length == 1) continue;
+
       if (sLength == 0) {
+        // literally no idea how this line is ever run?
         if (m.length >= avgLen) {
           return m;
         }
