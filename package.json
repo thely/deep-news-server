@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "server": "nodemon server.js",
+    "server": "nodemon server.js --watch handlers -e js,json,cjs",
     "prod-server": "node server.js"
   },
   "dependencies": {
